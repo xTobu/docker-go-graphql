@@ -1,0 +1,63 @@
+version: "3.3"
+services:
+
+  # caddy:
+  #   container_name: tatara-caddy
+  #   image: tatara/caddy:latest
+  #   build: ./.docker/caddy
+  #   links:
+  #       - node_client
+  #       - go_api
+  #   ports:
+  #       - "8889:80"
+        
+  # node_client:
+  #   container_name: tatara-client
+  #   image: tatara/client:latest
+  #   build:
+  #     context: ./services/client/
+  #     dockerfile: ../../.docker/node/client/prod/Dockerfile
+  #   ports:
+  #     - "3000"
+  #   restart: always
+
+  go_graphql:
+    container_name: container_go_graphql
+    environment:
+      - ENV=development
+    build:
+      context: ./services/graphql/
+      dockerfile: ../../.docker/go/graphql/Dockerfile
+    volumes:
+      - ./services/graphql:/root/go    
+    ports:
+      - "3000:8889"
+    restart: always
+    tty: true
+    privileged: true
+    # links:
+    #   - mysql
+    # depends_on:
+    #   - mysql
+    # networks:
+    #   - app_net
+  # mysql:
+  #   container_name: tatara-mysql
+  #   image: tatara/mysql:latest
+  #   build: ./.docker/mysql
+  #   ports:
+  #     - "3305:3306"
+  #   volumes:
+  #     - ./.docker/mysql/data:/var/lib/mysql
+  #     - ./.docker/mysql/my.cnf:/etc/my.cnf
+  #   environment:
+  #     MYSQL_ROOT_PASSWORD: 123456
+  #     MYSQL_DATABASE: myapp
+  #   restart: always
+  #   tty: true
+    # networks:
+    #   - app_net
+
+# networks:
+#   app_net:
+#     driver: bridge
